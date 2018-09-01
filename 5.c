@@ -48,7 +48,7 @@ int main(int argc,char **argv){
         dup2(fd[0],0);
 
         //Now reading the pipe (since its directly connected to stdin of current one)
-        int exit_stat=execlp("cut","cut","-c","1,2",NULL);
+        int exit_stat=execlp("cut","cut","-d",":","-f","1",NULL);
         printf("BAD Exit_Status: %d \n",exit_stat);
         exit(0);
     }
