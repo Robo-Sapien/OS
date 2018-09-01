@@ -11,8 +11,6 @@ int check_visit(int n,int visited[]);
 int check_prime(int num);
 void sigint_handler(int s);
 
-//Defining the array size
-#define arr_len 10
 
 int main(){
     //Starting the file descriptor
@@ -38,7 +36,14 @@ int main(){
         while(1){
             //Read handling
             int num;
-            read(pfd[0],&num,sizeof(int));
+            //Seems its automatically waiting until 4bytes read
+            int byte_read=read(pfd[0],&num,sizeof(int));
+
+            //Handling the case if byte read is less
+            //each time we are writing 4byte, so reading less should not be a problem
+            if(byte_read!=sizeof(int)){
+                continue;
+            }
 
             //Doing child's work
             int flag=check_prime(num);
@@ -59,9 +64,19 @@ int main(){
         //Closing the read end for parent since we will just read from pipe
         close(pfd[0]);
 
+        //Taking the array as input
+        int arr_len;
+        scanf("%d",&arr_len);
+        //int arr[arr_len]={12,23,33,42,57,61,72,87,48,2};
+        //int visited[arr_len]={0};
+        int arr[arr_len];
+        int visited[arr_len];
+        for(int i=0;i<arr_len;i++){
+            scanf("%d",&arr[i]);
+            visited[i]=0;
+        }
+
         //Starting the transmission process
-        int arr[arr_len]={12,23,33,42,57,61,72,87,48,2};
-        int visited[arr_len]={0};
         int flag=check_visit(arr_len,visited);
         while(flag==0){
             //generating the random number
