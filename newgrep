@@ -1,0 +1,4 @@
+#!/bin/bash
+
+gcc 5.c &&
+./a.out $1 $2
